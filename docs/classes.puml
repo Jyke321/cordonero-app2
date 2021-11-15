@@ -1,0 +1,51 @@
+@startuml
+class InventoryManagementApplication {
+    +start()
+}
+class InventoryManagementApplicationController {
+    'controller stuff
+    -DataHandler data
+    'active in response to boolean, prompt passed from
+    'controller item that caused an invalid value
+    +errorHandler()
+}
+class DataHandler {
+    '1024 Items
+    -List<Item> list
+    'holds save and load methods
+    +saveList()
+    +loadList()
+    'other methods to access list values
+    +getList()
+    +addItemToList()
+    'uses Item.set(), return boolean
+    +editItemInList()
+    +deleteItemInList()
+    +clearAllItemsInList()
+}
+class Item {
+    'US dollars, greater than 0
+    -monetaryValue
+    'A-XXX-XXX-XXX where A is a letter
+    'and X is a number or letter
+    -serialNumber
+    'between 2-256 (inclusive) characters
+    -name
+    'validation methods, return boolean
+    +validateMonetaryValue()
+    +validateSerialNumber()
+    +validateName()
+    'accessor methods
+    +getMonetaryValue()
+    +getSerialNumber()
+    +getName()
+    'uses validate method, return boolean
+    +setMonetaryValue()
+    +setSerialNumber()
+    +setName()
+}
+
+InventoryManagementApplication -- InventoryManagementApplicationController
+InventoryManagementApplicationController --o DataHandler
+DataHandler --o Item
+@enduml
