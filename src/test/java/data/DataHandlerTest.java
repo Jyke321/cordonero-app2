@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,15 +48,23 @@ class DataHandlerTest {
         Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
         testData.addItemToList(item);
         testData.addItemToList(item2);
-        Path expected = Paths.get("src/test/resources/data/saveData.txt");
+        String expected = "<!doctype html><html lang=\"en\"><head><style type=\"text/css\">table, td {border: 1px solid #333;}thead, tfoot {background-color: #333;color: #fff;}</style><meta charset=\"UTF-8\"><title>saveData</title></head><body><table><thead><tr><th scope=\"col\">Serial Number</th><th scope=\"col\">Name</th><th scope=\"col\">Value</th></tr></thead><tbody><tr><td>A-XB1-24A-XY3</td><td>Xbox Series X</td><td>$1499.00</td><td hidden>1499.0</td></tr><tr><td>S-40A-ZBD-E47</td><td>Samsung TV</td><td>$599.99</td><td hidden>599.99</td></tr></tbody></table></body></html>";
         //create test file to compare with
         File test = new File("src/test/resources/data/testData.html");
         testData.saveList(test);
-        //get the new file's path
-        Path actual = Path.of(String.valueOf(test));
+        //scans file
+        StringBuilder buffer = new StringBuilder();
+        try (FileReader in = new  FileReader(test.getAbsolutePath())) {
+            int c;
+            while((c = in.read()) != -1) {
+                buffer.append((char) c);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String actual = buffer.toString();
         //compare the files
-        long mismatch = Files.mismatch(expected,actual);
-        assertEquals(-1,mismatch);
+        assertEquals(expected,actual);
     }
     @Test
     void testSaveListAsJSON() throws IOException {

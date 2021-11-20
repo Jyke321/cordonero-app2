@@ -95,15 +95,15 @@ public class DataHandler {
     }
     private void parseToHTML() {
         StringBuilder stringBuffer = new StringBuilder();
-        stringBuffer.append("<!DOCTYPE html>" + "<html lang=\"en\">" +
-            "<style type=\"text/css\">" + "table, td {" +
+        stringBuffer.append("<!doctype html>" + "<html lang=\"en\">" +
+            "<head>" + "<style type=\"text/css\">" + "table, td {" +
             "border: 1px solid #333;" + "}" + "thead, tfoot {" +
             "background-color: #333;" + "color: #fff;" + "}" +
-            "</style>" + "<head>" + "<meta charset=\"UTF-8\">" +
+            "</style>" + "<meta charset=\"UTF-8\">" +
             "<title>saveData</title>" + "</head>" + "<body>" +
             "<table>" + "<thead>" + "<tr>" + "<th scope=\"col\">Serial Number</th>" +
             "<th scope=\"col\">Name</th>" + "<th scope=\"col\">Value</th>" +
-            "</tr>" + "</thead>" + " <tbody>");
+            "</tr>" + "</thead>" + "<tbody>");
         for (int i = 0; i<getItemCount(); i++) {
             stringBuffer.append(String.format("%s" +
                 "%s%s%s" + "%s%s%s" + "%s%s%s" + "%s%s%s" + "%s",
@@ -114,21 +114,10 @@ public class DataHandler {
         }
         stringBuffer.append("</tbody>" + "</table>" +
             "</body>" + "</html>");
-        Document doc = Jsoup.parse(String.valueOf(stringBuffer));
-        dataBuffer = doc.toString();
+        dataBuffer = stringBuffer.toString();
     }
     private void parseToJSON() {
          Gson gson = new Gson();
          dataBuffer = gson.toJson(list);
-         /*
-         Could be used to make format nice, but my test doesn't
-         like it when one txt is LF and the other is CRLF
-         dataBuffer = dataBuffer.replace("[","[\n");
-         dataBuffer = dataBuffer.replace("{","  {\n");
-         dataBuffer = dataBuffer.replace("]","\n]");
-         dataBuffer = dataBuffer.replace("}","\n  }");
-         dataBuffer = dataBuffer.replace(",",",\n");
-         dataBuffer = dataBuffer.replaceAll("(\\G|\\n)(\\\")","\n    \"");
-          */
     }
 }
