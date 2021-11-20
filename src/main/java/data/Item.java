@@ -77,4 +77,8 @@ public class Item {
         String buffer = formatter.format(this.value);
         this.monetaryValue = buffer.replace(",","");
     }
+    public void setMonetaryValue(String monetaryValue) {
+        this.monetaryValue = monetaryValue;
+        this.value = Double.parseDouble(monetaryValue.substring(1));
+    }
 }

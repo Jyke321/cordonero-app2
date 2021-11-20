@@ -55,7 +55,7 @@ class ItemTest {
         assertEquals(expected,testItem.getName());
     }
     @Test
-    void testSetMonetaryValue() {
+    void testSetValue() {
         //compare whether the value held within monetary value changed to new value
         Item expectedItem = new Item(100,"","");
         testItem.setValue(100);
@@ -81,5 +81,11 @@ class ItemTest {
         String expected = "$1499.00";
         testItem.setValue(1499);
         assertEquals(expected,testItem.getMonetaryValue());
+    }
+    @Test
+    void testSetMonetaryValue() {
+        double expected = 1499.0;
+        testItem.setMonetaryValue("$1499.00");
+        assertEquals(expected,testItem.getValue());
     }
 }

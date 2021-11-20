@@ -6,18 +6,14 @@ package data;
  */
 
 import com.google.gson.Gson;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.safety.Safelist;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarEntry;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class DataHandler {
     //1024 Items (will probably change to observable list
@@ -35,10 +31,13 @@ public class DataHandler {
         }
         return invalidFile;
     }
-    public void loadList(File loadLocation) {
-
+    public boolean loadList(File loadLocation) throws IOException {
+        //call parse from method
+        return parseFromFileToBuffer(loadLocation);
     }
+
     //other methods to access list values
+
     public List getList() {
         return list;
     }
@@ -56,13 +55,14 @@ public class DataHandler {
 
     }
     public void deleteAllItemsInList() {
-
+        list.clear();
     }
     private boolean validateItem() {
         return false;
     }
     //parse data into specified file format
     private boolean parseToSaveBuffer(File file) throws IOException {
+        //calls a parse method based off file extension
         String fileType = Files.probeContentType(Path.of(String.valueOf(file)));
         switch (fileType) {
             case "text/plain":
@@ -119,5 +119,65 @@ public class DataHandler {
     private void parseToJSON() {
          Gson gson = new Gson();
          dataBuffer = gson.toJson(list);
+    }
+    //parse data from specified file formats
+    private boolean parseFromFileToBuffer(File file) throws IOException {
+        //calls a parse from file method based on file type
+        String fileType = Files.probeContentType(Path.of(String.valueOf(file)));
+        switch (fileType) {
+            case "text/plain":
+                //call parseFromTSV()
+                parseFromTSV(file);
+                break;
+            case "text/html":
+                //call parseFromHTML()
+                parseFromHTML(file);
+                break;
+            case "application/json":
+                //call parseFromJSON
+                parseFromJSON(file);
+                break;
+            default:
+                dataBuffer = fileType;
+                return true;
+        }
+        return false;
+    }
+    private void parseFromTSV(File file) {
+        deleteAllItemsInList();
+        try (Scanner in = new Scanner(new FileReader(file.getAbsolutePath()))) {
+            if (in.hasNext())
+                in.nextLine();
+            in.useDelimiter("[    ]|[\n]");
+            while(in.hasNext()) {
+                dataBuffer = in.nextLine();
+                dataBuffer = dataBuffer.replace("    ", "\n");
+                Stream<String> stringBuffer = dataBuffer.lines();
+                List<String> list = stringBuffer.toList();
+                Item itemBuffer = new Item();
+                itemBuffer.setSerialNumber(list.get(0));
+                itemBuffer.setName(list.get(1));
+                itemBuffer.setMonetaryValue(list.get(2));
+                addItemToList(itemBuffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void parseFromHTML(File file) {
+    }
+    private void parseFromJSON(File file) {
+    }
+    public String getItemSerialNumber(int i) {
+        return list.get(i).getSerialNumber();
+    }
+    public String getItemName(int i) {
+        return list.get(i).getName();
+    }
+    public String getItemMonetaryValue(int i) {
+        return list.get(i).getMonetaryValue();
+    }
+    public double getItemValue(int i) {
+        return list.get(i).getValue();
     }
 }

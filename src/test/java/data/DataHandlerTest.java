@@ -85,8 +85,24 @@ class DataHandlerTest {
         assertEquals(-1,mismatch);
     }
     @Test
-    void testLoadListFromTSV() {
+    void testLoadListFromTSV() throws IOException {
         //load from sample tsv and compare to correct values
+        //get path for load file
+        Path load = Paths.get("src/test/resources/data/saveData.txt");
+        testData.loadList(load.toFile());
+        //create item to test against
+        DataHandler expectedData = new DataHandler();
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        expectedData.addItemToList(item);
+        expectedData.addItemToList(item2);
+        //compare
+        for (int i = 0; i<expectedData.getItemCount(); i++) {
+            assertEquals(expectedData.getItemSerialNumber(i),testData.getItemSerialNumber(i));
+            assertEquals(expectedData.getItemName(i),testData.getItemName(i));
+            assertEquals(expectedData.getItemMonetaryValue(i),testData.getItemMonetaryValue(i));
+            assertEquals(expectedData.getItemValue(i),testData.getItemValue(i));
+        }
     }
     @Test
     void testLoadListFromHTML() {
