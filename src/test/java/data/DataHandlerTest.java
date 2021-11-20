@@ -1,6 +1,5 @@
 package data;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,16 +11,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class DataHandlerTest {
     //used in each test when needed
     DataHandler testData = new DataHandler();
-    @BeforeEach
-    void initializeDefaultList() {
-        //create a default list to be test (all values are correct by default)
-    }
     @Test
     void testSaveListAsTXT() throws IOException {
         //create save with given data in the list to match pre-made tsv, html, json files
@@ -179,37 +175,94 @@ class DataHandlerTest {
     @Test
     void testGetList() {
         //verify list received matches initialized values
-        ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        //create list to test against
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        testData.addItemToList(item);
+        testData.addItemToList(item2);
+        String[] expectedSerialNumber = {"A-XB1-24A-XY3","S-40A-ZBD-E47"};
+        String[] expectedName = {"Xbox Series X","Samsung TV"};
+        String[] expectedMonetaryValue = {"$1499.00","$599.99"};
+        double[] expectedValue = {1499.00,599.99};
+        for (int i = 0; i< testData.getItemCount(); i++) {
+            assertEquals(expectedSerialNumber[i],testData.getItemSerialNumber(i));
+            assertEquals(expectedName[i],testData.getItemName(i));
+            assertEquals(expectedMonetaryValue[i],testData.getItemMonetaryValue(i));
+            assertEquals(expectedValue[i],testData.getItemValue(i));
+        }
     }
     @Test
     void testAddItemToList() {
         //test that add items works properly
-        ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        //make items to insert to list
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        //make list to test against
+        ArrayList<Item> expectedList = new ArrayList<>(
+                Arrays.asList(item,item2)
+        );
+        //
+        testData.addItemToList(item);
+        testData.addItemToList(item2);
+        assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
+    }
+    private String generateNextSerialNumber(String string) {
+        StringBuilder builder = new StringBuilder(string);
+        int length = string.length();
+        if (builder.charAt(length-1)<9) {
+            builder.replace(length-1,1, String.valueOf((char)(builder.charAt(length-1)+1)));
+        }
+        return builder.toString();
     }
     @Test
     void testAdd1024ItemsToList() {
         //test that it is possible to add 1024 items using add item method
-        ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        Item genericItem = new Item(1499.0,"A-111-111-111","Xbox Series X");
+        for (int i = 0; i < 1024; i++) {
+            testData.addItemToList(genericItem);
+            genericItem.setSerialNumber(generateNextSerialNumber(genericItem.getSerialNumber()));
+        }
+        //test later
+        //assertEquals(1024,testData.getItemCount());
     }
     @Test
     void testEditItemInList() {
         //edit an item in the list
-        ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        ArrayList<Item> expectedList = new ArrayList<>(
+                Arrays.asList(item,item2)
+        );
+        Item item3 = new Item(500.00,"A-XB1-24A-XY3","Xbox Series X");
+        testData.addItemToList(item3);
+        testData.addItemToList(item2);
+        testData.editItemInList(0,item);
+        assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
     }
     @Test
     void testDeleteItemInList() {
         //test that add items works properly
-        ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        ArrayList<Item> expectedList = new ArrayList<>(
+                Arrays.asList(item,item2)
+        );
+        Item item3 = new Item(500.00,"A-XB1-24A-XY3","Xbox Series X");
+        testData.addItemToList(item);
+        testData.addItemToList(item2);
+        testData.addItemToList(item3);
+        testData.deleteItemInList(2);
+        assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
     }
     @Test
     void testDeleteAllItemsInList() {
         //edit an item in the list
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
         ArrayList<Item> expectedList = new ArrayList<>();
-        assertEquals(Arrays.asList(expectedList),Arrays.asList(expectedList));
+        testData.addItemToList(item);
+        testData.addItemToList(item2);
+        testData.deleteAllItemsInList();
+        assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
     }
 }

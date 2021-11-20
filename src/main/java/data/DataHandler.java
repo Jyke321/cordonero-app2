@@ -50,21 +50,45 @@ public class DataHandler {
     public int getItemCount() {
         return list.size();
     }
-    public void addItemToList(Item item) {
-        list.add(item);
+    public String addItemToList(Item item) {
+        String error = validateItem(item);
+        if (error.isEmpty())
+            if (!list.contains(item)) {
+                list.add(item);
+            } else
+                error = "Item already exists!";
+        return error;
     }
     //uses Item.set(), return boolean
-    public void editItemInList() {
-
+    public String editItemInList(int i,Item item) {
+        String error = validateItem(item);
+        if (error.isEmpty())
+            if (!list.contains(item)) {
+                list.add(i,item);
+                list.remove(i+1);
+            }
+            else
+                error = "Item already exists!";
+        return error;
     }
-    public void deleteItemInList() {
-
+    public void deleteItemInList(int i) {
+        list.remove(i);
     }
     public void deleteAllItemsInList() {
         list.clear();
     }
-    private boolean validateItem() {
-        return false;
+    private String validateItem(Item item) {
+        //validate an item that has already been populated
+        String validationError = "";
+        if (item.validateSerialNumber(item.getSerialNumber()))
+            validationError = "Invalid Serial Number\n";
+        else if (list.contains(item.getSerialNumber()))
+            validationError = "Serial Number already in use\n";
+        if (item.validateName(item.getName()))
+            validationError = "Invalid Name\n";
+        if (item.validateMonetaryValue(item.getValue()))
+            validationError = "Invalid Monetary Value\n";
+        return validationError;
     }
     //parse data into specified file format
     private boolean parseToSaveBuffer(File file) throws IOException {
