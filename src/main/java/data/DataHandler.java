@@ -6,11 +6,17 @@ package data;
  */
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -114,7 +120,8 @@ public class DataHandler {
         }
         stringBuffer.append("</tbody>" + "</table>" +
             "</body>" + "</html>");
-        dataBuffer = stringBuffer.toString();
+        Document doc = Jsoup.parse(String.valueOf(stringBuffer));
+        dataBuffer = doc.toString();
     }
     private void parseToJSON() {
          Gson gson = new Gson();
@@ -165,9 +172,44 @@ public class DataHandler {
         }
     }
     private void parseFromHTML(File file) {
+        deleteAllItemsInList();
+        try (Scanner in = new Scanner(new FileReader(file.getAbsolutePath()))) {
+            in.useDelimiter("<tr>\n        <td>|</tr>\n    <tr>");
+            if (in.hasNext()) {
+                in.next();
+            }
+            while(in.hasNext()) {
+                dataBuffer = in.next();
+                dataBuffer = dataBuffer.replace("</td>", "");
+                dataBuffer = dataBuffer.replace("<td hidden>", "");
+                dataBuffer = dataBuffer.replace("<td>", "");
+                dataBuffer = dataBuffer.replace("\n","");
+                dataBuffer = dataBuffer.replace("        ","\n");
+                dataBuffer = dataBuffer.strip();
+                Stream<String> stringBuffer = dataBuffer.lines();
+                List<String> list = stringBuffer.toList();
+                Item itemBuffer = new Item();
+                itemBuffer.setSerialNumber(list.get(0));
+                itemBuffer.setName(list.get(1));
+                itemBuffer.setMonetaryValue(list.get(2));
+                addItemToList(itemBuffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void parseFromJSON(File file) {
+        deleteAllItemsInList();
+        Gson gson = new Gson();
+        try (Reader in = new FileReader(file.getAbsolutePath())){
+            JsonReader json = new JsonReader(in);
+            Item[] itemArray = gson.fromJson(json, Item[].class);
+            list = Arrays.stream(itemArray).toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+    //get Item member values
     public String getItemSerialNumber(int i) {
         return list.get(i).getSerialNumber();
     }

@@ -48,7 +48,39 @@ class DataHandlerTest {
         Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
         testData.addItemToList(item);
         testData.addItemToList(item2);
-        String expected = "<!doctype html><html lang=\"en\"><head><style type=\"text/css\">table, td {border: 1px solid #333;}thead, tfoot {background-color: #333;color: #fff;}</style><meta charset=\"UTF-8\"><title>saveData</title></head><body><table><thead><tr><th scope=\"col\">Serial Number</th><th scope=\"col\">Name</th><th scope=\"col\">Value</th></tr></thead><tbody><tr><td>A-XB1-24A-XY3</td><td>Xbox Series X</td><td>$1499.00</td><td hidden>1499.0</td></tr><tr><td>S-40A-ZBD-E47</td><td>Samsung TV</td><td>$599.99</td><td hidden>599.99</td></tr></tbody></table></body></html>";
+        String expected = "<!doctype html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <style type=\"text/css\">table, td {border: 1px solid #333;}thead, tfoot {background-color: #333;color: #fff;}</style>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>saveData</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<table>\n" +
+                "    <thead>\n" +
+                "    <tr>\n" +
+                "        <th scope=\"col\">Serial Number</th>\n" +
+                "        <th scope=\"col\">Name</th>\n" +
+                "        <th scope=\"col\">Value</th>\n" +
+                "    </tr>\n" +
+                "    </thead>\n" +
+                "    <tbody>\n" +
+                "    <tr>\n" +
+                "        <td>A-XB1-24A-XY3</td>\n" +
+                "        <td>Xbox Series X</td>\n" +
+                "        <td>$1499.00</td>\n" +
+                "        <td hidden>1499.0</td>\n" +
+                "    </tr>\n" +
+                "    <tr>\n" +
+                "        <td>S-40A-ZBD-E47</td>\n" +
+                "        <td>Samsung TV</td>\n" +
+                "        <td>$599.99</td>\n" +
+                "        <td hidden>599.99</td>\n" +
+                "    </tr>\n" +
+                "    </tbody>\n" +
+                "</table>\n" +
+                "</body>\n" +
+                "</html>";
         //create test file to compare with
         File test = new File("src/test/resources/data/testData.html");
         testData.saveList(test);
@@ -63,8 +95,8 @@ class DataHandlerTest {
             e.printStackTrace();
         }
         String actual = buffer.toString();
-        //compare the files
-        assertEquals(expected,actual);
+        //compare the files not caring about whitespace
+        assertEquals(expected.replace(" ",""),actual.replace(" ",""));
     }
     @Test
     void testSaveListAsJSON() throws IOException {
@@ -105,12 +137,44 @@ class DataHandlerTest {
         }
     }
     @Test
-    void testLoadListFromHTML() {
+    void testLoadListFromHTML() throws IOException {
         //load from sample html and compare to correct values
+        //get path for load file
+        Path load = Paths.get("src/test/resources/data/saveData.html");
+        testData.loadList(load.toFile());
+        //create item to test against
+        DataHandler expectedData = new DataHandler();
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        expectedData.addItemToList(item);
+        expectedData.addItemToList(item2);
+        //compare
+        for (int i = 0; i<expectedData.getItemCount(); i++) {
+            assertEquals(expectedData.getItemSerialNumber(i),testData.getItemSerialNumber(i));
+            assertEquals(expectedData.getItemName(i),testData.getItemName(i));
+            assertEquals(expectedData.getItemMonetaryValue(i),testData.getItemMonetaryValue(i));
+            assertEquals(expectedData.getItemValue(i),testData.getItemValue(i));
+        }
     }
     @Test
-    void testLoadListFromJSON() {
+    void testLoadListFromJSON() throws IOException {
         //load from sample json and compare to correct values
+        //get path for load file
+        Path load = Paths.get("src/test/resources/data/saveData.json");
+        testData.loadList(load.toFile());
+        //create item to test against
+        DataHandler expectedData = new DataHandler();
+        Item item = new Item(1499.00,"A-XB1-24A-XY3","Xbox Series X");
+        Item item2 = new Item(599.99,"S-40A-ZBD-E47","Samsung TV");
+        expectedData.addItemToList(item);
+        expectedData.addItemToList(item2);
+        //compare
+        for (int i = 0; i<expectedData.getItemCount(); i++) {
+            assertEquals(expectedData.getItemSerialNumber(i),testData.getItemSerialNumber(i));
+            assertEquals(expectedData.getItemName(i),testData.getItemName(i));
+            assertEquals(expectedData.getItemMonetaryValue(i),testData.getItemMonetaryValue(i));
+            assertEquals(expectedData.getItemValue(i),testData.getItemValue(i));
+        }
     }
     @Test
     void testGetList() {
