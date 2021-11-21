@@ -29,6 +29,12 @@ public class Item {
         this.serialNumber = serialNumber;
         this.name = name;
     }
+    public Item(String monetaryValue, String serialNumber, String name) {
+        this.monetaryValue = monetaryValue;
+        this.value = Double.parseDouble(monetaryValue.substring(1));
+        this.serialNumber = serialNumber;
+        this.name = name;
+    }
     //validation methods, return boolean
     public boolean validateMonetaryValue(double value) {
         //return true if an error occurred

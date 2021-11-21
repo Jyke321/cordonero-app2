@@ -11,8 +11,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -47,6 +45,7 @@ public class DataHandler {
     public List getList() {
         return list;
     }
+
     public int getItemCount() {
         return list.size();
     }
@@ -108,7 +107,7 @@ public class DataHandler {
                 parseToJSON();
                 break;
             default:
-                dataBuffer = fileType;
+                dataBuffer = "Invalid File Type";
                 return true;
         }
         return false;
