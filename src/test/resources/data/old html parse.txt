@@ -1,0 +1,23 @@
+try (Scanner in = new Scanner(new FileReader(file.getAbsolutePath()))) {
+            in.useDelimiter("<tr>\n[ ]{8}<td>|</tr>\n[ ]{4}<tr>");
+            if (in.hasNext()) {
+                in.next();
+            }
+            while(in.hasNext()) {
+                dataBuffer = in.next();
+                System.out.println("Hello");
+                dataBuffer = dataBuffer.replace("</td>", "");
+                dataBuffer = dataBuffer.replace("<td hidden>", "");
+                dataBuffer = dataBuffer.replace("<td>", "");
+                dataBuffer = dataBuffer.replace("\n","");
+                dataBuffer = dataBuffer.replace("        ","\n");
+                dataBuffer = dataBuffer.strip();
+                List<String> buffer = dataBuffer.lines().toList();
+                if (buffer.size()>2) {
+                    Item itemBuffer = new Item(buffer.get(2),buffer.get(0),buffer.get(1));
+                    addItemToList(itemBuffer);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }

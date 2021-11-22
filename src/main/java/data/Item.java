@@ -15,15 +15,16 @@ public class Item {
     private String serialNumber;
     //between 2-256 (inclusive) characters
     private String name;
-    private transient NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    //needs to be transient for json to parse properly (please ignore sonar on this one
+    private final transient NumberFormat formatter = NumberFormat.getCurrencyInstance();
     //constructor
-    Item() {
+    public Item() {
         this.value = 0;
         updateMonetaryValue();
         this.serialNumber = "";
         this.name = "";
     }
-    Item(double monetaryValue, String serialNumber, String name) {
+    public Item(double monetaryValue, String serialNumber, String name) {
         this.value = monetaryValue;
         updateMonetaryValue();
         this.serialNumber = serialNumber;
@@ -38,7 +39,7 @@ public class Item {
     //validation methods, return boolean
     public boolean validateMonetaryValue(double value) {
         //return true if an error occurred
-        return (value <= 0);
+        return (value < 0);
     }
     public boolean validateSerialNumber(String string) {
         //return true if an error occurred

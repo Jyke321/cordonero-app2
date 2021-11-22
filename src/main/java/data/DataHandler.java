@@ -9,19 +9,17 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class DataHandler {
     //1024 Items (will probably change to observable list
-    private List<Item> list = new ArrayList<Item>();
+    private List<Item> list = new ArrayList<>();
     //a buffer to hold data to be saved or decrypted after being loaded
     private String dataBuffer;
     //holds save and load methods
@@ -42,7 +40,7 @@ public class DataHandler {
 
     //other methods to access list values
 
-    public List getList() {
+    public List<Item> getList() {
         return list;
     }
 
@@ -51,26 +49,39 @@ public class DataHandler {
     }
     public String addItemToList(Item item) {
         String error = validateItem(item);
-        if (error.isEmpty())
-            if (!list.contains(item)) {
+        if (error.isEmpty()) {
+            if (checkListForRepeatedSerialNumber(item.getSerialNumber(),"")) {
+                error = "Serial number already exists!";
+            } else {
                 list.add(item);
-            } else
-                error = "Item already exists!";
-        return error;
-    }
-    //uses Item.set(), return boolean
-    public String editItemInList(int i,Item item) {
-        String error = validateItem(item);
-        if (error.isEmpty())
-            if (!list.contains(item)) {
-                list.add(i,item);
-                list.remove(i+1);
             }
-            else
-                error = "Item already exists!";
+        }
         return error;
     }
-    public void deleteItemInList(int i) {
+    //checks list for repeated serial number
+    private boolean checkListForRepeatedSerialNumber(String serialNumber,String originalSN){
+        if (serialNumber.compareTo(originalSN) != 0) {
+            for (Item item : list) {
+                if (item.getSerialNumber().contains(serialNumber))
+                    return true;
+            }
+        }
+        return false;
+    }
+    //swaps items return error message if any
+    public String editItemInList(Item originalItem,Item item) {
+        String error = validateItem(item);
+        if (error.isEmpty()) {
+            if (checkListForRepeatedSerialNumber(item.getSerialNumber(),originalItem.getSerialNumber())) {
+                error = "Serial number already exists!";
+            } else {
+                list.set(list.indexOf(originalItem),item);
+            }
+        }
+        return error;
+    }
+    //delete items
+    public void deleteItemInList(Item i) {
         list.remove(i);
     }
     public void deleteAllItemsInList() {
@@ -81,8 +92,6 @@ public class DataHandler {
         String validationError = "";
         if (item.validateSerialNumber(item.getSerialNumber()))
             validationError = "Invalid Serial Number\n";
-        else if (list.contains(item.getSerialNumber()))
-            validationError = "Serial Number already in use\n";
         if (item.validateName(item.getName()))
             validationError = "Invalid Name\n";
         if (item.validateMonetaryValue(item.getValue()))
@@ -94,21 +103,19 @@ public class DataHandler {
         //calls a parse method based off file extension
         String fileType = Files.probeContentType(Path.of(String.valueOf(file)));
         switch (fileType) {
-            case "text/plain":
-                //call parseToTSV()
-                parseToTSV();
-                break;
-            case "text/html":
-                //call parseToHTML()
-                parseToHTML();
-                break;
-            case "application/json":
-                //call parseToJSON
-                parseToJSON();
-                break;
-            default:
+            case "text/plain" ->
+                    //call parseToTSV()
+                    parseToTSV();
+            case "text/html" ->
+                    //call parseToHTML()
+                    parseToHTML();
+            case "application/json" ->
+                    //call parseToJSON
+                    parseToJSON();
+            default -> {
                 dataBuffer = "Invalid File Type";
                 return true;
+            }
         }
         return false;
     }
@@ -134,8 +141,7 @@ public class DataHandler {
             "<th scope=\"col\">Name</th>" + "<th scope=\"col\">Value</th>" +
             "</tr>" + "</thead>" + "<tbody>");
         for (int i = 0; i<getItemCount(); i++) {
-            stringBuffer.append(String.format("%s" +
-                "%s%s%s" + "%s%s%s" + "%s%s%s" + "%s%s%s" + "%s",
+            stringBuffer.append(String.format("%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
                 "<tr>", "<td>",list.get(i).getSerialNumber(),"</td>",
                 "<td>",list.get(i).getName(),"</td>",
                 "<td>",list.get(i).getMonetaryValue(),"</td>",
@@ -155,21 +161,19 @@ public class DataHandler {
         //calls a parse from file method based on file type
         String fileType = Files.probeContentType(Path.of(String.valueOf(file)));
         switch (fileType) {
-            case "text/plain":
-                //call parseFromTSV()
-                parseFromTSV(file);
-                break;
-            case "text/html":
-                //call parseFromHTML()
-                parseFromHTML(file);
-                break;
-            case "application/json":
-                //call parseFromJSON
-                parseFromJSON(file);
-                break;
-            default:
+            case "text/plain" ->
+                    //call parseFromTSV()
+                    parseFromTSV(file);
+            case "text/html" ->
+                    //call parseFromHTML()
+                    parseFromHTML(file);
+            case "application/json" ->
+                    //call parseFromJSON
+                    parseFromJSON(file);
+            default -> {
                 dataBuffer = fileType;
                 return true;
+            }
         }
         return false;
     }
@@ -178,16 +182,16 @@ public class DataHandler {
         try (Scanner in = new Scanner(new FileReader(file.getAbsolutePath()))) {
             if (in.hasNext())
                 in.nextLine();
-            in.useDelimiter("[    ]|[\n]");
+            in.useDelimiter("[ ]{4}|[\n]");
             while(in.hasNext()) {
                 dataBuffer = in.nextLine();
                 dataBuffer = dataBuffer.replace("    ", "\n");
                 Stream<String> stringBuffer = dataBuffer.lines();
-                List<String> list = stringBuffer.toList();
+                List<String> bufferList = stringBuffer.toList();
                 Item itemBuffer = new Item();
-                itemBuffer.setSerialNumber(list.get(0));
-                itemBuffer.setName(list.get(1));
-                itemBuffer.setMonetaryValue(list.get(2));
+                itemBuffer.setSerialNumber(bufferList.get(0));
+                itemBuffer.setName(bufferList.get(1));
+                itemBuffer.setMonetaryValue(bufferList.get(2));
                 addItemToList(itemBuffer);
             }
         } catch (IOException e) {
@@ -196,26 +200,20 @@ public class DataHandler {
     }
     private void parseFromHTML(File file) {
         deleteAllItemsInList();
-        try (Scanner in = new Scanner(new FileReader(file.getAbsolutePath()))) {
-            in.useDelimiter("<tr>\n        <td>|</tr>\n    <tr>");
-            if (in.hasNext()) {
-                in.next();
-            }
-            while(in.hasNext()) {
-                dataBuffer = in.next();
-                dataBuffer = dataBuffer.replace("</td>", "");
-                dataBuffer = dataBuffer.replace("<td hidden>", "");
-                dataBuffer = dataBuffer.replace("<td>", "");
-                dataBuffer = dataBuffer.replace("\n","");
-                dataBuffer = dataBuffer.replace("        ","\n");
-                dataBuffer = dataBuffer.strip();
-                Stream<String> stringBuffer = dataBuffer.lines();
-                List<String> list = stringBuffer.toList();
-                Item itemBuffer = new Item();
-                itemBuffer.setSerialNumber(list.get(0));
-                itemBuffer.setName(list.get(1));
-                itemBuffer.setMonetaryValue(list.get(2));
-                addItemToList(itemBuffer);
+        Document htmlDoc;
+        try {
+            htmlDoc = Jsoup.parse(file, "ISO-8859-1");
+            Element table = htmlDoc.selectFirst("table");
+            Iterator<Element> row = table.select("tr").iterator();
+            //skip th row
+            row.next();
+            while (row.hasNext()) {
+                Iterator<Element> ite = (row.next()).select("td").iterator();
+                String serialNumber = ite.next().text();
+                String name = ite.next().text();
+                String value = ite.next().text();
+                Item newItem = new Item(value,serialNumber,name);
+                addItemToList(newItem);
             }
         } catch (IOException e) {
             e.printStackTrace();

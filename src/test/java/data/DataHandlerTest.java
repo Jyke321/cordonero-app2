@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -233,10 +232,11 @@ class DataHandlerTest {
         ArrayList<Item> expectedList = new ArrayList<>(
                 Arrays.asList(item,item2)
         );
-        Item item3 = new Item(500.00,"A-XB1-24A-XY3","Xbox Series X");
+        //different serial number required
+        Item item3 = new Item(500.00,"A-XB2-24A-XY3","Xbox Series X");
         testData.addItemToList(item3);
         testData.addItemToList(item2);
-        testData.editItemInList(0,item);
+        testData.editItemInList(item3,item);
         assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
     }
     @Test
@@ -251,7 +251,7 @@ class DataHandlerTest {
         testData.addItemToList(item);
         testData.addItemToList(item2);
         testData.addItemToList(item3);
-        testData.deleteItemInList(2);
+        testData.deleteItemInList(item3);
         assertEquals(Arrays.asList(expectedList),Arrays.asList(testData.getList()));
     }
     @Test
