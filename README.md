@@ -62,8 +62,56 @@ When you are satisfied with the value you have enter in the serial number you ar
 
 ##### Editing Values
 You can edit values entered in the table by double clicking on the item you wish to edit and pressing enter when you are satisfied with your changes.
-The value you change must be a valid, keep in mind that monetary value needs a $ to be valid
+The value you change must be a valid, keep in mind that monetary value needs to be a number and have a '$' to be valid.
 
+##### Removing Items
+There are two available options for removing items:
+ - Delete Item
+ - Delete All Items
+
+Both of these options can be found at the top of the application under the "Edit" menu option.
+Delete Item will delete the selected item. You can select items by clicking on them once.
+Delete All Items will clear the list of all items in the list.
+
+##### Sorting Items
+There are three available sorting options:
+ - Sort by Name
+ - Sort by Value
+ - Sort by Serial Number
+
+All three of these methods can be accessed by clicking on the table headers. When done, an arrow should appear next to the header signifying how the particular header is being sorted.
+
+##### Searching For Items
+There are two available search methods:
+ - Search by Name
+ - Search by Serial Number
+
+These methods can be accessed by hovering over "View" in the menu, and then hovering over "Search by" before finally selecting with method you wish to serach by. By default both methods are selected at start up and deselecting both cause the opposite to automatically be selected.
+
+To activate searching, one must type into the search text field to enter a search key. Text typed in the search text field automatically updates what is being searched for.
+
+##### Saving and Loading
+You can save and load by going to the "File" menu and selecting "Save" or "Load". Saving can also be done by pressing (ctrl + s).
+When saving is selected a window will be brought up to save the file at a designated spot. By default, the opened spot is in the application folder, but the user may select anywhere else to save the data.
+The data can be saved in one of the three different extensions:
+ - .txt (formated as TSV)
+ - .html
+ - .json
+
+When loading a window similar to saving window is brought up allowing the user to load files of the following extensions:
+ - .txt (formated as TSV)
+ - .html
+ - .json
+
+>  *** Loading files not created by this application has not been tested and can very likely cause crashes ***
+
+##### Getting Help
+Using the "Help" menu in the application you may be brought to the github page for the application with this guid on it.
+
+##### Closing the application
+There are two ways to close the application:
+ - Close - available through the File Menu
+ - The 'X' button - In the top right of windows applications (this may not be there on non-windows devices)
 
 ### Copyright
 
