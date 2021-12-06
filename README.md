@@ -121,9 +121,9 @@ There are two ways to close the application:
 [Java]: <https://jdk.java.net/16/>
 [IntelliJ]: <https://www.jetbrains.com/idea/download/>
 [GIT]: <http://git-scm.com/>
-[image1]: <>
-[image2]: <https://previews.dropbox.com/p/thumb/ABXtJ0KnpSmXdfBY0ecKWXArzmEC4JFWPkiKI-hdPJSgIxj4sye4AHaHNjXV2ST3u2tfFSjf8r09cKYk_NbAsBibZojYZxFSbyfCA07ahc3uO4-hiwzNs0j9FqV0Nipj4GhFlcyrvE3U6W8BnmNc0kZvzAHlF1kuvMAbmT5HJaeAJkNPJICz_xNHE2g5Nni8snRSh6aIrLG1xkt_x2iUu6ouWZAdLK-5mKkMzKVJ_gZJL8tXZPd9gRQ7UjO8rQrfCj0t6Zp62-uVu2gpJjsn2jQXbTRsdl1FPBK6EwL82E5_CGn2hjNWRy54PRpJ-TP4L7PB5F2ADVeHdr2DLWpciOXGnGnXQO5n1wLnaUcTKMIGXA/p.png>
-[image3]: <https://previews.dropbox.com/p/thumb/ABUABVmnC6pzTc6L5g9EREc0slArJb8zDPmHdfkQHjaAfNzwKwBaoyEzw83-m1mEOgE-d3SJ3o_bARdLT4XJgpZapRYOrzrJ6eRwvhqI7MmbIzTeBsj9VJBrqtvipWxsDM-_Ot_UAgGgU6QxocMf97z7L7X09JTTXPI0dTHCs-H3bFDq2qf6nXXXbJvtMNWEWzQ0-0YoJlIREcfgeMwBLSW3VCafGYUqOw8knpc_SH8-B_zHUEZigwkjDRvZmXreb5KTwEiH6OILc1qWPH5Ntm_9dER1lhDZxSKr6-YutPstD3p-_I6-tBYBvET33I2RJT377AtG1fgZ4k9qH6HbP1DdXnyGkgrIkfaBJMcq4J8Jog/p.png>
-[image4]: <https://previews.dropbox.com/p/thumb/ABVQ5iDSTc13PHg6syHHFxKnvs2qP8bXeFrNcEqG4p1XXTBOl4LaDkrmBG1LuUeZol7J17IfEdIz1y_cu6tkXnEtIO6-H_rP3D9-0asnNDMg4HxYb7ZkaDVTeHhZDpbkrH5FOxPqNdim-ZakYUubIpC9cIxU43FcGtzl1JaeSB3RdmSRzPnIHTNHhWa4sA95u6m-PQQ2gG6O5Sp-YcQ-YOo5Y6Nhj2ygnrci0BoZCh4na-5KdlmrN36GKDpbwvSZxGXabgE-ncxL-qB36x-4JC4cxiBV0Yf4x4rFhXl1pGkNTW_KeO7JuSEcUOH8KQWEGDcsKlhoAMb4MMNonsNOFCOTm5o-nsJ7qYKc-W5AwWYpYg/p.png>
-[image5]: <https://previews.dropbox.com/p/thumb/ABWT0DQQV-psC0_x2S61LXxQ_yG0CR_vtTYti-HYlzBJll9BB8DZnTd6vJuMSqpN4GozoW7ZK_4erHgc3abayvRGxt8N4QCvn09NJ1DEQ3xYl-F-zyD6s47DUZvYwV6NE1UV8SlNf3DMpcEsJLsQerS9WMLi4x6Xd3fICgU_1HW77H34u70xK0PHYV6a5QXB2XB2NHrwBhEeyjaywLJJhfc0hXK9gnuIB6eG6FczOCK8c7uEZnG3SnWKLrnq49YK2cWPxHe3waOG7c78yc1e3YP4QQJ8YIp3E-dRrlt7OkQ0RuA3OB4wnVelQirucWBFfVtrUcUXShOtAwtMbA1BUk9pSFbwEVCdF13-wkDE3JSruA/p.png>
-[image6]: <https://previews.dropbox.com/p/thumb/ABXwunK7OghXdrGTWicKuJSTikj0_F_0y0sIqVVVoge5s9kUNHK3UNyCjVb0toF5k77Yq8D9udUe4hdW45r2ShNq9_VJZz675CMidXLaq8o2C-R6aLhftc3cy7gFhF8Wts_DXnTiZWduNieGJ8foMHhx8M5Yg81Df11xchPwmLX5VxkqUX1WJfJgKbRwNrzWDeT_rK3FpfVFnDMGJZ_SEH-y0vAbXcfXV0khl8CLDWAL_SKZp2uZqW5J6Q2W2LQ5NKOHDfG-76jp1nbMVfgVqZqdD_VZpwR1yVkXj1Fl3Sj2B3ziS7GB-vPNRlopBAI0Jkyt6Lplyc0Wc_OKkigxYym0HHSsGjDnNp8cLwiU-H8wMg/p.png>
+[image1]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image1.png>
+[image2]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image2.png>
+[image3]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image3.png>
+[image4]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image4.png>
+[image5]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image5.png>
+[image6]: <https://github.com/Jyke321/cordonero-app2/blob/main/docs/readmeImages/image6.png>
